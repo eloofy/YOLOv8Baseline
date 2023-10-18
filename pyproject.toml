@@ -7,6 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+ultralytics = "^8.0.200"
+roboflow = "^1.1.7"
+black = "^23.10.0"
+pylint = "^3.0.1"
 
 
 [build-system]
