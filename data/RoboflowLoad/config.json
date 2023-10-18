@@ -1,0 +1,8 @@
+{
+    "api_key": "BMI8NiY4ez646AFW8ESc",
+    "workspace_name": "roboflow-universe-projects",
+    "project_name": "buildings-instance-segmentation",
+    "version_number": 1,
+    "export_format": "coco",
+    "local_location": "Data"
+}
