@@ -1,0 +1,7 @@
+path: ../YOLOv8Baseline/data/BuildingsInstanceSegmentationImageDataset/
+train: 'DataLoader/Data/train_yolov8_converted'
+val: 'DataLoader/Data/valid_yolov8_converted'
+
+nc: 1
+names:
+  0: 'buildings'

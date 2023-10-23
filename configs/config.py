@@ -7,7 +7,7 @@ train_parameters = {
     'model_path': '../yolov8n-seg.pt',
     'data_config': 'data.yaml',
     'img_size': 512,
-    'epochs': 1,
+    'epochs': 10,
     'patience': 100,
     'batch_size': 8,
     'device': 0,

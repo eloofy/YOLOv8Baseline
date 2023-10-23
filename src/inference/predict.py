@@ -5,7 +5,7 @@ from PIL import Image
 from ultralytics import YOLO
 from configs.config import home_path
 
-BEST_MODEL_PATH = os.path.join(home_path, "src/train/runs/segment/yolov8n_custom7/weights/best.pt")
+BEST_MODEL_PATH = os.path.join(home_path, "src/train/runs/segment/yolov8n_custom/weights/best.pt")
 
 
 def predict_yolov8(image: Image.Image, model_path: str) -> torch.Tensor:
