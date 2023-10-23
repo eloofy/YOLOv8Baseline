@@ -1,11 +1,18 @@
 import logging
 import json
 from roboflow import Roboflow
-from data.convert.convert_coco_yolo_buildings_instance_segmentation import convert_coco2yolov8
+from data.convert.convert_coco_yolo_buildings_instance_segmentation import (
+    convert_coco2yolov8,
+)
 
 
 class DatasetDownloader:
     def __init__(self, config_file="config.json"):
+        """
+        Initializes the DatasetDownloader.
+
+        :param config_file: Path to the configuration file in JSON format.
+        """
         self.config_file = config_file
 
     def download_dataset(self):
@@ -35,13 +42,20 @@ class DatasetDownloader:
     def load_config(self):
         """
         Load configuration from a JSON file.
+
+        :return: Dictionary containing configuration settings.
         """
         with open(self.config_file, "r") as config_file:
             config = json.load(config_file)
         return config
 
-    def run(self, data_sets, with_converted):
-        # Download the dataset
+    def run(self, data_sets: list[str], with_converted: bool):
+        """
+        Downloads the dataset and optionally converts it to YOLOv8 format.
+
+        :param data_sets: List of dataset names to download.
+        :param with_converted: Whether to convert the dataset to YOLOv8 format.
+        """
         self.download_dataset()
 
         # Convert the dataset to YOLOv8 format
