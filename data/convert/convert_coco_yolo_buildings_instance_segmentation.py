@@ -41,3 +41,4 @@ def convert_coco2yolov8(data_set):
 
     preparing_folders(data_dir, data_set)
 
+
