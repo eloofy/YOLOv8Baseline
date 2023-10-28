@@ -1,0 +1,26 @@
+training_params:
+  model: yolov8x-seg.pt
+  data: data.yaml
+  imgsz: 512
+  epochs: 50
+  patience: 100
+  batch: 16
+  device: 0
+  workers: 12
+  optimizer: AdamW
+  seed: 12345
+  cos_lr: True
+  lr0: 0.001
+  task: InstanceSegmentsRes
+  name: YOLOv8_ver0
+  hide_labels: True
+  show_labels: False
+  mode: train
+  single_cls: False
+
+mlflow_params:
+  experiment_name: BestTennisDetector
+  model_name: TennisDetector
+  image_name: tennisdetector
+  version: 0
+  docker_port: 4000
