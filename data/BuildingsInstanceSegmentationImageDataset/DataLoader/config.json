@@ -4,5 +4,5 @@
     "project_name": "buildings-instance-segmentation",
     "version_number": 1,
     "export_format": "coco",
-    "local_location": "Data"
+    "local_location": "/files/shared_data/"
 }

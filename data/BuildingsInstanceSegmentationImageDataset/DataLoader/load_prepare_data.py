@@ -5,6 +5,8 @@ from data.convert.convert_coco_yolo_buildings_instance_segmentation import (
     convert_coco2yolov8,
 )
 
+from configs.config import home_path
+
 
 class DatasetDownloader:
     def __init__(self, config_file="config.json"):
@@ -66,7 +68,7 @@ class DatasetDownloader:
 
 def main():
     dataset_downloader = DatasetDownloader()
-    dataset_downloader.run(["train", "valid", "test"], True)
+    dataset_downloader.run(["train", "valid", "test"], False)
 
 
 if __name__ == "__main__":
