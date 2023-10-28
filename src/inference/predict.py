@@ -22,7 +22,5 @@ def predict_yolov8(image: Image.Image, model_path: str) -> torch.Tensor:
     model = YOLO(model_path)
     results = model(image)
 
-    print(1)
-
     return results[0].masks.data
 

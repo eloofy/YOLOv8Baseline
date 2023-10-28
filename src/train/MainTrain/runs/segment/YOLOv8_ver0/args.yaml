@@ -1,10 +1,10 @@
 task: segment
 mode: train
-model: ../yolov8n-seg.pt
+model: yolov8x-seg.pt
 data: data.yaml
-epochs: 10
+epochs: 50
 patience: 100
-batch: 8
+batch: 16
 imgsz: 512
 save: true
 save_period: -1
@@ -12,7 +12,7 @@ cache: false
 device: 0
 workers: 12
 project: null
-name: yolov8n_custom
+name: YOLOv8_ver0
 exist_ok: false
 pretrained: true
 optimizer: AdamW
@@ -95,4 +95,4 @@ mixup: 0.0
 copy_paste: 0.0
 cfg: null
 tracker: botsort.yaml
-save_dir: runs/segment/yolov8n_custom
+save_dir: runs/segment/YOLOv8_ver0
