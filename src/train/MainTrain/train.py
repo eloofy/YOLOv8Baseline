@@ -69,17 +69,16 @@ class YOLOTrainer:
 
 
 def main():
-    try:
-        model_cfg_path = 'configs/model_cfg.yaml'
+    os.environ['MLFLOW_TRACKING_URI'] = "http://mlflow:5000"
+    os.environ['MLFLOW_EXPERIMENT_NAME'] = "YOLOv8BaseLineTrain"
+    model_cfg_path = 'configs/model_cfg.yaml'
 
-        trainer = YOLOTrainer(
-            os.environ['MLFLOW_TRACKING_URI'],
-            os.environ['MLFLOW_EXPERIMENT_NAME']
-        )
+    trainer = YOLOTrainer(
+        os.environ['MLFLOW_TRACKING_URI'],
+        os.environ['MLFLOW_EXPERIMENT_NAME']
+    )
 
-        trainer.run_training(model_cfg_path)
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
+    trainer.run_training(model_cfg_path)
 
 
 if __name__ == "__main__":

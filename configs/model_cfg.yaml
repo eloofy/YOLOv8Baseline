@@ -1,10 +1,10 @@
 training_params:
-  model: yolov8n-seg.pt
+  model: yolov8x-seg.pt
   data: data.yaml
   imgsz: 512
   epochs: 50
   patience: 100
-  batch: 8
+  batch: 16
   device: 0
   workers: 12
   optimizer: AdamW
@@ -17,6 +17,15 @@ training_params:
   mode: train
   single_cls: False
   amp: False
+  save_json: True
+  half: False
+  mosaic: 0
+  flipud: 0.5
+  fliplr: 0.5
+  degrees : 0.5
+
+
+
 
 mlflow_params:
   experiment_name: BestTennisDetector
