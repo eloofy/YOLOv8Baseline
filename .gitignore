@@ -159,3 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 /data/BuildingsInstanceSegmentationImageDataset/DataLoader/Data
+/src/train/MainTrain/runs/segment/YOLOv8_ver0/weights/
+/src/train/MainTrain/yolov8x-seg.pt
