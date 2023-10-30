@@ -10,7 +10,7 @@ Project Organization
       ├── data/                              <- Data path.
       │   └── BuildInstSegmeImData/          <- Dataset load path.
       │       └── DataLoader/
-      │           ├── load_prepare_data.py  <- Script to lad data from roboflow
+      │           ├── load_prepare_data.py   <- Script to lad data from roboflow
       │           └── config.json            <- Config to connect and load data from roboflow.
       │
       │   └── convert/                       <- Path with scripts which convert data from COCO to YOLOv8 format.
@@ -23,7 +23,7 @@ Project Organization
       │       └── Maintrain/                 <- Main train path.
       │           ├── runs/                  <- All results of train with best weights path.
       │           ├── data.yaml              <- Data config for train.
-      │           └── train.py               <- train script
+      │           └── train.py               <- Train script
       
 
 
