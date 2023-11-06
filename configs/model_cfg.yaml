@@ -1,5 +1,5 @@
 training_params:
-  model: yolov8x-seg.pt
+  model: yolov8n-seg.pt
   data: data.yaml
   imgsz: 512
   epochs: 50
@@ -23,13 +23,3 @@ training_params:
   flipud: 0.5
   fliplr: 0.5
   degrees : 0.5
-
-
-
-
-mlflow_params:
-  experiment_name: BestTennisDetector
-  model_name: TennisDetector
-  image_name: tennisdetector
-  version: 0
-  docker_port: 4000
