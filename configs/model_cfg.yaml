@@ -2,13 +2,13 @@ training_params:
 
   # Train params
 
-  model: yolov8x-seg.pt # path to model file, i.e. yolov8n.pt, yolov8n.yaml
+  model: yolov8n-seg.pt # path to model file, i.e. yolov8n.pt, yolov8n.yaml
   data: data.yaml # path to data file, i.e. coco128.yaml
   imgsz: 512 # size of input images as integer
-  epochs: 50 # number of epochs to train for
+  epochs: 1 # number of epochs to train for
   patience: 10 # epochs to wait for no observable improvement for early stopping of training
   batch: 16 # number of images per batch (-1 for AutoBatch)
-  device: 6 # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
+  device: 0 # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
   workers: 12 # number of worker threads for data loading (per RANK if DDP)
   optimizer: AdamW # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
   seed: 12345 # random seed for reproducibility

@@ -3,36 +3,28 @@ import yaml
 from ultralytics import YOLO
 import mlflow
 from ultralytics import settings
+from src.train.MLflowTracking.cust_mlflow import MLflowTracking
 
 from configs.config import home_path
-
-settings.update({'mlflow': False})
+settings.update({"mlflow": False})
 
 
 class YOLOTrainer:
-    def __init__(self, tracking_uri: str, experiment_name: str):
+    def __init__(self, tracking_uri: str, experiment_name: str, cfg_model: str):
         """
         Initialize the YOLOTrainer.
         Args:
             tracking_uri: The MLflow tracking URI.
             experiment_name: Name of the MLflow experiment.
         """
-        self.tracking_uri = tracking_uri
-        self.experiment_name = experiment_name
-        self._setup_mlflow_tracking(self)
+        self.model = YOLO(
+            self._load_model_config(cfg_model)["training_params"]["model"]
+        )
+        # self.model.callbacks = {...} Add custom func
+        self.mlflow_tracking = MLflowTracking(tracking_uri, experiment_name)
 
-    @staticmethod
-    def _setup_mlflow_tracking(self):
-        """
-        Set up MLflow tracking using the provided tracking URI and experiment name.
-        If the experiment doesn't exist, it creates one.
-        """
-        mlflow.set_tracking_uri(self.tracking_uri)
-
-        if mlflow.get_experiment_by_name(self.experiment_name) is None:
-            mlflow.create_experiment(self.experiment_name)
-
-        mlflow.set_experiment(self.experiment_name)
+    # @staticmethod
+    # def _load_dataset_description(count_datasets):
 
     @staticmethod
     def _load_model_config(model_cfg_file: str):
@@ -48,18 +40,22 @@ class YOLOTrainer:
         with open(os.path.join(home_path, model_cfg_file), "r") as file:
             return yaml.safe_load(file)
 
-    @staticmethod
-    def _train_yolo_model(model_config: dict):
+    def _train_yolo_model(self, model_config: dict):
         """
         Train a YOLO model based on the provided configuration.
 
         Args:
             model_config: YOLO model configuration as a dictionary.
         """
-        mlflow.autolog()
-        with mlflow.start_run(run_name="YOLOv8_ver"):
-            model = YOLO(model_config['training_params']['model'])
-            model.train(**model_config['training_params'])
+        with mlflow.start_run(
+            run_name="YOLOv8_ver",
+            description=self.mlflow_tracking.load_description(
+                file_path=os.path.join(home_path, "src/train/MainTrain/data.yaml")
+            )
+        ):
+            self.model.train(**model_config["training_params"])
+            self.mlflow_tracking.set_all_params(self.model, model_config)
+
 
     def run_training(self, model_cfg_file: str):
         """
@@ -73,12 +69,11 @@ class YOLOTrainer:
 
 
 def main():
-    model_cfg_path = 'configs/model_cfg.yaml'
+    model_cfg_path = "configs/model_cfg.yaml"
 
-    trainer = YOLOTrainer(
-        "http://neuron:5000",
-        "YOLOv8BaseLineTrain"
-    )
+    trainer = YOLOTrainer("http://neuron:5000",
+                          "YOLOv8BaseLineTrain",
+                          model_cfg_path)
 
     trainer.run_training(model_cfg_path)
 
