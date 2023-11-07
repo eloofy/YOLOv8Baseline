@@ -1,27 +1,40 @@
-from ultralytics import settings
-import mlflow
 import os
+import mlflow
 import yaml
 from configs.config import home_path
-
-from ultralytics.utils.callbacks.base import on_fit_epoch_end
-
-settings.update({'mlflow': False})
+from typing import Any, Dict, Union
+from ultralytics import YOLO
 
 
-def change_metr_repr(metrics):
-    clear_metrics = {key.replace('(', '').replace(')', ''): value for key, value in metrics.items()}
+def clean_metric_names(metrics: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Clean metric names by removing parentheses.
 
-    return clear_metrics
+    Args:
+        metrics: Dictionary of metrics with possibly formatted names.
+
+    Returns:
+        Dict: Dictionary of metrics with cleaned names.
+    """
+    return {
+        key.replace("(", "").replace(")", ""): value for key, value in metrics.items()
+    }
 
 
 class MLflowTracking:
-    def __init__(self, tracking_uri, experiment_name):
+    def __init__(self, tracking_uri: str, experiment_name: str):
+        """
+        Initialize an MLflowTracking instance.
+
+        Args:
+            tracking_uri: The MLflow tracking URI.
+            experiment_name: Name of the MLflow experiment.
+        """
         self.tracking_uri = tracking_uri
         self.experiment_name = experiment_name
-        self._setup_mlflow_tracking()
+        self.setup_mlflow_tracking()
 
-    def _setup_mlflow_tracking(self):
+    def setup_mlflow_tracking(self) -> None:
         """
         Set up MLflow tracking using the provided tracking URI and experiment name.
         If the experiment doesn't exist, it creates one.
@@ -34,32 +47,72 @@ class MLflowTracking:
         mlflow.set_experiment(self.experiment_name)
 
     @staticmethod
-    def _log_params(model_cfg):
-        mlflow.log_params(
-            model_cfg["training_params"]
+    def log_training_params(model_cfg: Dict[str, Union[str, Dict[str, Any]]]) -> None:
+        """
+        Log training parameters to MLflow.
+
+        Args:
+            model_cfg: YOLO model configuration.
+        """
+        mlflow.log_params(model_cfg["training_params"])
+
+    @staticmethod
+    def log_training_metrics(model: YOLO) -> None:
+        """
+        Log training metrics to MLflow.
+
+        Args:
+            model: YOLO model.
+        """
+        metrics = clean_metric_names(model.trainer.metrics.copy())
+        loss_metrics = {
+            name: value.item()
+            for name, value in zip(model.trainer.loss_names, model.trainer.loss_items)
+        }
+
+        mlflow.log_metrics({**metrics, **loss_metrics})
+
+    @staticmethod
+    def log_trained_model(model: YOLO) -> None:
+        """
+        Log the trained model to MLflow.
+
+        Args:
+            model (Any): YOLO model.
+        """
+        mlflow.pyfunc.log_model(
+            artifact_path="model",
+            artifacts={"model_path": str(model.trainer.save_dir)},
+            python_model=mlflow.pyfunc.PythonModel(),
         )
 
     @staticmethod
-    def _log_metrics(model):
-        model.trainer.metrics = change_metr_repr(metrics=model.trainer.metrics.copy())
-        loss_metrics = dict(item for item in zip(list(model.trainer.loss_names), model.trainer.loss_items.tolist()))
+    def load_dataset_description(file_path: str) -> str:
+        """
+        Load and return a description of the dataset from a file.
 
-        mlflow.log_metrics(
-            {**model.trainer.metrics, **loss_metrics}
-        )
+        Args:
+            file_path (str): Path to the dataset description file.
 
-    @staticmethod
-    def load_description(file_path):
-        with open(file_path, 'r') as data_file:
-            print(data_file)
+        Returns:
+            str: Description of the dataset.
+        """
+        with open(file_path, "r") as data_file:
             dataset_name = yaml.safe_load(data_file)["path"].split(os.path.sep)[-4]
 
-        return (f'Datasets:\n'
-                f'{dataset_name}')
+        return f"Datasets:\n{dataset_name}"
 
-    def set_all_params(self, model, model_cfg):
-        self._log_params(model_cfg)
-        self._log_metrics(model)
-        mlflow.pyfunc.log_model(artifact_path="model",
-                                artifacts={'model_path': str(model.trainer.save_dir)},
-                                python_model=mlflow.pyfunc.PythonModel())
+    def set_all_params(
+        self, model: YOLO, model_cfg: Dict[str, Union[str, Dict[str, Any]]]
+    ) -> None:
+        """
+        Log all relevant parameters and artifacts to MLflow.
+
+        Args:
+            model: YOLO model.
+            model_cfg (Dict[str, Union[str, Dict[str, Any]]): YOLO model configuration.
+        """
+        self.log_training_params(model_cfg)
+        self.log_training_metrics(model)
+        self.log_trained_model(model)
+        mlflow.log_artifact(os.path.join(home_path, "configs/model_cfg.yaml"), "config")
