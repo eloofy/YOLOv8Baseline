@@ -5,6 +5,7 @@ import mlflow
 from ultralytics import settings
 from src.train.MLflowTracking.cust_mlflow import MLflowTracking
 from configs.config import home_path
+from src.train.Callbacks.callbacks import on_fit_epoch_end
 
 
 MLFLOW_TRACKING_URI = "http://mlflow:5000"
@@ -16,7 +17,7 @@ settings.update({"mlflow": False, "runs_dir": RESULTS_DIR})
 
 
 class YOLOTrainer:
-    def __init__(self, tracking_uri: str, experiment_name: str, cfg_model: str):
+    def __init__(self, tracking_uri: str, experiment_name: str, cfg_model: str, callbacks):
         """
         Initialize the YOLOTrainer.
 
@@ -26,7 +27,7 @@ class YOLOTrainer:
         """
         self.cfg_file = self._load_model_config(cfg_model)
         self.model = YOLO(self.cfg_file["training_params"]["model"])
-        # self.model.callbacks = {...} Add custom func
+        self.callbacks = callbacks
         self.mlflow_tracking = MLflowTracking(tracking_uri, experiment_name)
 
     @staticmethod
@@ -51,24 +52,32 @@ class YOLOTrainer:
             model_config: YOLO model configuration as a dictionary.
         """
         with mlflow.start_run(
-            run_name="YOLOv8_ver",
+            run_name="YOLOv8_ver_SN",
             description=self.mlflow_tracking.load_dataset_description(
-                file_path=os.path.join(home_path, "src/train/MainTrain/data.yaml")
-            ),
+                file_path=os.path.join(home_path, "src/train/MainTrain/train/TrainDataConfigs/data_SN4.yaml")
+            )
         ):
             self.model.train(**model_config["training_params"])
             self.mlflow_tracking.set_all_params(self.model, model_config)
+
+    def _set_callbacks(self):
+        for callback_key in self.callbacks:
+            self.model.add_callback(callback_key, self.callbacks[callback_key])
 
     def run_training(self):
         """
         Run the YOLO model training process.
 
         """
+        self._set_callbacks()
         self._train_yolo_model(self.cfg_file)
 
 
 def main():
-    trainer = YOLOTrainer(MLFLOW_TRACKING_URI, EXPERIMENT_NAME, MODEL_CONFIG_FILE)
+    dict_callbacks = {
+        "on_fit_epoch_end": on_fit_epoch_end
+    }
+    trainer = YOLOTrainer(MLFLOW_TRACKING_URI, EXPERIMENT_NAME, MODEL_CONFIG_FILE, dict_callbacks)
 
     trainer.run_training()
 

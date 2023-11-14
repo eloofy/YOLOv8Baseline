@@ -1,0 +1,8 @@
+path: data/BuildingsInstanceSegmentationImageDataset/Data
+train: 'train'
+val: 'valid'
+#test: 'test_yolov8_converted'
+
+nc: 1
+names:
+  0: 'buildings'

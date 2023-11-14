@@ -1,0 +1,7 @@
+path: data/SpaceNet4/DataPrepared
+train: 'autosplit_train.txt'
+val: 'autosplit_val.txt'
+
+nc: 1
+names:
+  0: 'buildings'
