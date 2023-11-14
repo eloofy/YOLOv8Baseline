@@ -5,15 +5,16 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 roboflow = "^1.1.7"
 ultralytics = "^8.0.200"
 torch = {version = "^2.1.0+cu118", source = "pytorch"}
 torchvision = "^0.16.0+cu118"
 torchaudio = "^2.1.0+cu118"
 black = "^23.10.0"
-pylint = "^3.0.2"
 mlflow = "^2.7.1"
+gdal = "3.3.0"
+pendulum = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 
