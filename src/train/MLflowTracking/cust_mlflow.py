@@ -98,7 +98,7 @@ class MLflowTracking:
             str: Description of the dataset.
         """
         with open(file_path, "r") as data_file:
-            dataset_name = yaml.safe_load(data_file)["path"].split(os.path.sep)[-1]
+            dataset_name = yaml.safe_load(data_file)["path"].split(os.path.sep)[-3]
 
         return f"Datasets:\n{dataset_name}"
 
