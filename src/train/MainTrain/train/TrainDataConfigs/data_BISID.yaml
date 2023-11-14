@@ -1,4 +1,4 @@
-path: data/BuildingsInstanceSegmentationImageDataset/Dataloader/Data
+path: data/BuildingsInstanceSegmentationImageDataset/DataLoader/Data
 train: 'train_yolov8_converted'
 val: 'valid_yolov8_converted'
 #test: 'test_yolov8_converted'

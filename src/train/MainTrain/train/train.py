@@ -4,14 +4,15 @@ from ultralytics import YOLO
 import mlflow
 from ultralytics import settings
 from src.train.MLflowTracking.cust_mlflow import MLflowTracking
-from configs.config import home_path
+from configs.config import (
+    home_path,
+    RESULTS_DIR,
+    MODEL_CONFIG_FILE,
+    MLFLOW_TRACKING_URI,
+    EXPERIMENT_NAME
+)
 from src.train.Callbacks.callbacks import on_fit_epoch_end
 
-
-MLFLOW_TRACKING_URI = "http://mlflow:5000"
-EXPERIMENT_NAME = "YOLOv8BaseLineTrain"
-MODEL_CONFIG_FILE = "configs/model_cfg.yaml"
-RESULTS_DIR = os.path.join(home_path, "src/train/MainTrain/results/")
 
 settings.update({"mlflow": False, "runs_dir": RESULTS_DIR})
 
@@ -52,7 +53,7 @@ class YOLOTrainer:
             model_config: YOLO model configuration as a dictionary.
         """
         with mlflow.start_run(
-            run_name="YOLOv8_ver_SN",
+            run_name="YOLOv8_ver1_BISID",
             description=self.mlflow_tracking.load_dataset_description(
                 file_path=os.path.join(home_path, "src/train/MainTrain/train/TrainDataConfigs/data_SN4.yaml")
             )
@@ -61,6 +62,9 @@ class YOLOTrainer:
             self.mlflow_tracking.set_all_params(self.model, model_config)
 
     def _set_callbacks(self):
+        """
+        Set callbacks.
+        """
         for callback_key in self.callbacks:
             self.model.add_callback(callback_key, self.callbacks[callback_key])
 
