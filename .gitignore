@@ -160,4 +160,7 @@ cython_debug/
 #.idea/
 /data/BuildingsInstanceSegmentationImageDataset/DataLoader/Data
 /src/train/MainTrain/runs/segment/YOLOv8_ver0/weights/
-/src/train/MainTrain/yolov8x-seg.pt
+/src/train/MainTrain/train/yolov8x-seg.pt
+/data/SpaceNet4/DataPrepared/
+/data/SpaceNet4/DataRaw/
+/data/SpaceNet4/summaryData/
