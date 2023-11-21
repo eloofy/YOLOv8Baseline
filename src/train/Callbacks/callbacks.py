@@ -13,10 +13,13 @@ def on_fit_epoch_end(predictor: SegmentationTrainer):
     Returns:
     - None
     """
+    if predictor.epoch == 0:
+        pass
+    
     train_metrics_losses = clean_metric_names(predictor.metrics)
     val_losses = clean_metric_names(
         dict(
-            zip(list(predictor.loss_names), predictor.validator.loss.tolist())
+            zip(list(predictor.loss_names), predictor.tloss.tolist())
         )
     )
     mlflow.log_metrics(
