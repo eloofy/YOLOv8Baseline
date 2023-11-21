@@ -64,13 +64,12 @@ class MLflowTracking:
         Args:
             model: YOLO model.
         """
-        metrics = clean_metric_names(model.trainer.metrics.copy())
-        loss_metrics = {
-            name: value.item()
-            for name, value in zip(model.trainer.loss_names, model.trainer.loss_items)
+        metrics = {
+            "best_" + name: value.item()
+            for name, value in clean_metric_names(model.trainer.metrics.copy()).items()
         }
 
-        mlflow.log_metrics({**metrics, **loss_metrics})
+        mlflow.log_metrics({**metrics})
 
     @staticmethod
     def log_trained_model(model: YOLO) -> None:
@@ -101,6 +100,18 @@ class MLflowTracking:
             dataset_name = yaml.safe_load(data_file)["path"].split(os.path.sep)[-3]
 
         return f"Datasets:\n{dataset_name}"
+
+    @staticmethod
+    def log_custom_artifact(artifact_path, save_path):
+        """
+        Log some artifact.
+
+        Args:
+            artifact_path: Path artifact.
+            save_path: Path to log.
+        """
+
+        mlflow.log_artifact(artifact_path, save_path)
 
     def set_all_params(
         self, model: YOLO, model_cfg: Dict[str, Union[str, Dict[str, Any]]]
