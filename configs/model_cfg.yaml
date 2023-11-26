@@ -3,18 +3,18 @@ training_params:
   # Train params
 
   model: yolov8x-seg.pt # path to model file, i.e. yolov8n.pt, yolov8n.yaml
-  data: TrainDataConfigs/data_SN4.yaml # path to data file, i.e. coco128.yaml
-  imgsz: 900 # size of input images as integer
-  epochs: 30 # number of epochs to train for
+  data: TrainDataConfigs/data_BISID_SN4.yaml # path to data file, i.e. coco128.yaml
+  imgsz: 512 # size of input images as integer
+  epochs: 1 # number of epochs to train for
   patience: 10 # epochs to wait for no observable improvement for early stopping of training
   batch: 32 # number of images per batch (-1 for AutoBatch)
-  device: 6, 9 # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
+  device: 6 # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
   workers: 12 # number of worker threads for data loading (per RANK if DDP)
   optimizer: AdamW # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
   seed: 12345 # random seed for reproducibility
   cos_lr: True # use cosine learning rate scheduler
-  lr0: 0.001 # initial learning rate (i.e. SGD=1E-2, Adam=1E-3)
-  lrf: 0.01 # final learning rate (lr0 * lrf)
+  lr0: 0.01 # initial learning rate (i.e. SGD=1E-2, Adam=1E-3)
+  lrf: 0.0001 # final learning rate (lr0 * lrf)
   momentum: 0.937 # SGD momentum/Adam beta1
   weight_decay: 0.0005 # optimizer weight decay 5e-4
   warmup_epochs: 3.0 # warmup epochs (fractions ok)

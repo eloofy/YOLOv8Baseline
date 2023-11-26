@@ -75,7 +75,7 @@ class YOLOTrainer:
         data_results = pd.DataFrame(
             columns=["nadir"] + list(self.model.trainer.metrics.keys())
         )
-        for nadir_cfg in list_data[:2]:
+        for nadir_cfg in list_data:
             results = self.model.val(
                 data=os.path.join(
                     home_path,
@@ -105,13 +105,13 @@ class YOLOTrainer:
         Args:
             model_config: YOLO model configuration as a dictionary.
         """
-        run_name_mlflow = "YOLOv8_ver1_SN4"
+        run_name_mlflow = "YOLOv8_ver1_BISID"
         with mlflow.start_run(
             run_name=run_name_mlflow,
             description=self.mlflow_tracking.load_dataset_description(
                 file_path=os.path.join(
                     home_path,
-                    "src/train/MainTrain/train/TrainDataConfigs/data_SN4.yaml",
+                    "src/train/MainTrain/train/TrainDataConfigs/data_BISID.yaml",
                 )
             ),
         ):
@@ -150,7 +150,7 @@ def main():
         EXPERIMENT_NAME,
         MODEL_CONFIG_FILE,
         dict_callbacks,
-        sn4_nadir=True,
+        sn4_nadir=False,
     )
     trainer.run_training()
 

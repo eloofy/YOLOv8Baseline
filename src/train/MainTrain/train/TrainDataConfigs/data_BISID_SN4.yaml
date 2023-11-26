@@ -1,0 +1,11 @@
+path: data
+train:
+  - 'BuildingsInstanceSegmentationImageDataset/DataLoader/Data/autosplit_train.txt'
+  - 'SpaceNet4/DataPrepared/autosplit_train.txt'
+val:
+  - 'BuildingsInstanceSegmentationImageDataset/DataLoader/Data/autosplit_val.txt'
+  - 'SpaceNet4/DataPrepared/autosplit_val.txt'
+
+nc: 1
+names:
+  0: 'buildings'
